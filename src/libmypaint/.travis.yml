@@ -1,0 +1,14 @@
+language: c
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - libjson0-dev
+      - scons
+      - python-nose
+
+script:
+    - scons
+    - nosetests
