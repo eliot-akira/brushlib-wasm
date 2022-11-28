@@ -4,13 +4,17 @@
   "description": "Brush engine based on WebAssembly port of MyPaint",
   "main": "index.js",
   "scripts": {
-    "build": "npm run wasm:build && mv docs/brushlib.js docs/brushlib-loader.js && npm run build:concat && rm docs/brushlib-loader.js",
-    "build:concat": "cat src/umd_header docs/brushlib-loader.js src/brushlib.js src/umd_footer >> docs/brushlib.js",
+    "build": "npm run wasm:build && npm run build:concat",
+    "build:concat": "mv docs/brushlib.js brushlib-loader.js && cat src/umd_header brushlib-loader.js src/brushlib.js src/umd_footer > docs/brushlib.js && rm brushlib-loader.js",
     "wasm:build": "npm run wasm:common -- -O3 --memory-init-file 0",
     "wasm:debug": "npm run wasm:common -- -O0",
     "wasm:common": "emcc src/main.c -I src/libmypaint -o docs/brushlib.js -Wall -Wbad-function-cast -Wcast-function-type -s EXPORTED_FUNCTIONS=\"['_init', '_stroke_to', '_reset_brush', '_set_brush_base_value', '_set_brush_mapping_n', '_set_brush_mapping_point', '_new_brush']\" -s NO_EXIT_RUNTIME=1 -s RESERVED_FUNCTION_POINTERS=2 -s NO_FILESYSTEM=1 -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS=\"['addFunction','ccall','cwrap']\""
   },
-  "keywords": [],
+  "keywords": [
+    "libmypaint",
+    "mypaint",
+    "wasm"
+  ],
   "author": "",
   "license": "ISC"
 }
