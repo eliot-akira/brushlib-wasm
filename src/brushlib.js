@@ -45,22 +45,31 @@ exports.create = function create() {
     class Bindings {
       constructor(drawDab, getColor) {
 
-        const colorProxyPtr = Module.addFunction(createGetColorProxy(Module, getColor),
+        const colorProxyPtr = Module.addFunction(
+          createGetColorProxy(Module, getColor),
           // (x, y, radius, rPointer, gPointer, bPointer, aPointer)
           // f32 f32 f32  i32 i32 i32 i32
-          'ifffffff'
+          'ifffiiii'
         )
-        const drawDabProxyPtr = Module.addFunction(drawDab,
+        const drawDabProxyPtr = Module.addFunction(
+          drawDab,
           // x,y,radius,r,g,b, a, hardness, alphaEraser, aspectRatio, angle, lockAlpha, colorize
           // f32 f32 f32 f32 f32  f32 f32 f32 f32 f32  f32 f32 f32
           'i' + ('f'.repeat(13))
         )
 
-        Module.ccall('init', 'void', ['number', 'number'], [drawDabProxyPtr, colorProxyPtr])
+        Module.ccall('init',
+          'void',
+          ['number', 'number'],
+          [drawDabProxyPtr, colorProxyPtr]
+        )
 
         this.Module = Module
+
         // https://emscripten.org/docs/api_reference/preamble.js.html#cwrap
-        this.stroke_to = Module.cwrap('stroke_to', 'void',
+        this.stroke_to = Module.cwrap(
+          'stroke_to',
+          'void',
           ['number', 'number', 'number', 'number', 'number', 'number']
           // float x, float y, float pressure, float xtilt, float ytilt, double dtime
         )
@@ -69,18 +78,32 @@ exports.create = function create() {
         this.new_brush = Module.cwrap('new_brush')
         this.reset_brush = Module.cwrap('reset_brush')
 
-        // Using the slower ccall() method, because cwrap() has a weird bug on FF when using strings :(
+        // Using the slower ccall() method, because cwrap() has a weird bug on FF when using strings?
         this.set_brush_base_value = function (name, value) {
-          Module.ccall('set_brush_base_value', 'void', ['string', 'number'], [name, value])
+          Module.ccall(
+            'set_brush_base_value',
+            'void',
+            ['string', 'number'],
+            [name, value]
+          )
         }
 
         this.set_brush_mapping_n = function (name, mapping, n) {
-          Module.ccall('set_brush_mapping_n', 'void', ['string', 'string', 'number'], [name, mapping, n])
+          Module.ccall(
+            'set_brush_mapping_n',
+            'void',
+            ['string', 'string', 'number'],
+            [name, mapping, n]
+          )
         }
 
         this.set_brush_mapping_point = function (name, mapping, index, x, y) {
-          Module.ccall('set_brush_mapping_point', 'void',
-            ['string', 'string', 'number', 'number', 'number'], [name, mapping, index, x, y])
+          Module.ccall(
+            'set_brush_mapping_point',
+            'void',
+            ['string', 'string', 'number', 'number', 'number'],
+            [name, mapping, index, x, y]
+          )
         }
       }
     }
@@ -119,7 +142,9 @@ exports.create = function create() {
         return fill
       },
 
-      /* taken form https://github.com/yapcheahshen/brushlib.js by Yap Cheah Shen :)  */
+      /**
+       * Based on a function from https://github.com/yapcheahshen/brushlib.js
+       */
       drawDab: function (
         x, y, radius,
         r, g, b, a,
@@ -164,32 +189,37 @@ exports.create = function create() {
 
     class Painter {
       constructor(bindings) {
-        this._bindings = bindings
+        this.bindings = bindings
       }
 
       // static
       static fromCanvas(ctx) {
         ctx = isFunction(ctx.getContext) ? ctx.getContext('2d') : ctx
-        return new Painter(new Bindings(bind(canvasRenderer.drawDab, ctx), bind(canvasRenderer.getColor, ctx)))
+        return new Painter(
+          new Bindings(
+            bind(canvasRenderer.drawDab, ctx),
+            bind(canvasRenderer.getColor, ctx)
+          )
+        )
       }
 
       setBrush(brush) {
-        this._bindings.load_brush(brush)
+        this.bindings.load_brush(brush)
         return this
       }
 
       setColor(r, g, b) {
         const hsv = Array.isArray(r) ? rgb2hsv.apply(null, r) : rgb2hsv(r, g, b)
 
-        this._bindings.set_brush_base_value('color_h', hsv.h)
-        this._bindings.set_brush_base_value('color_s', hsv.s)
-        this._bindings.set_brush_base_value('color_v', hsv.v)
+        this.bindings.set_brush_base_value('color_h', hsv.h)
+        this.bindings.set_brush_base_value('color_s', hsv.s)
+        this.bindings.set_brush_base_value('color_v', hsv.v)
 
         return this
       }
 
       newStroke(x, y) {
-        this._bindings.reset_brush()
+        this.bindings.reset_brush()
         return this.hover(x, y, 10)
       }
 
@@ -199,7 +229,7 @@ exports.create = function create() {
         ytilt = (ytilt || 0.0)
         dt = (dt || 0.1)
 
-        this._bindings.stroke_to(x, y, pressure, 0, ytilt, dt)
+        this.bindings.stroke_to(x, y, pressure, 0, ytilt, dt)
         return this
       }
 
