@@ -137,7 +137,7 @@ function create() {
       const colorProxyPtr = Module.addFunction(createGetColorProxy(Module, getColor),
         // (x, y, radius, r_ptr, g_ptr, b_ptr, a_ptr)
         // f32 f32 f32  i32 i32 i32 i32
-        'ifffffff'
+        'ifffiiii'
       )
       const drawDabProxyPtr = Module.addFunction(drawDab,
         // x,y,radius,r,g,b, a, hardness, alpha_eraser, aspect_ratio, angle, lock_alpha, colorize

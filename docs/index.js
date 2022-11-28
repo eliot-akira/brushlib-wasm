@@ -33,12 +33,11 @@ async function main() {
   painter.stroke(400, 200, 1, 0.8, 0, 0)
   painter.stroke(400, 400, 1, 0.8, 0, 0)
 
-
   painter.setBrush(brushlib.brushes[5])
   painter.setColor([200, 0, 280])
 
   painter.stroke(600, 400, 1, 0.01, 0, 0)
-  painter.stroke(200, 400, 1, 1, 0, 0)
+  painter.stroke(0, 400, 1, 1, 0, 0)
 
   painter.setBrush(brushlib.brushes[6])
   painter.setColor([255, 255, 0])
@@ -55,13 +54,20 @@ async function main() {
   painter.stroke(200, 200, 1, 0.8, 0, 0)
   painter.stroke(600, 400, 1, 0.8, 0, 0)
 
-
   painter.setBrush(brushlib.brushes[26])
   painter.setColor([0, 255, 255])
 
   painter.stroke(200, 400, 1, 0.8, 0, 0)
   painter.stroke(600, 0, 1, 0.3, 0, 0)
   painter.stroke(600, 600, 1, 0.8, 0, 0)
+
+  painter.setBrush(brushlib.brushes[17])
+  painter.setColor([80, 80, 180])
+  painter.stroke(600, 600, 1, 1, 0, 0)
+  painter.stroke(200, 400, 2, .1, 0, 0)
+  painter.hover(200, 400, 0)
+  painter.stroke(200, 400, 2, 1, 0, 0)
+  painter.stroke(600, 200, 2, .1, 0, 0)
 }
 
 main().catch(console.error)
