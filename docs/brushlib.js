@@ -176,7 +176,9 @@ exports.create = function create() {
         return fill
       },
 
-      /* taken form https://github.com/yapcheahshen/brushlib.js by Yap Cheah Shen :)  */
+      /**
+       * Based on a function from https://github.com/yapcheahshen/brushlib.js
+       */
       drawDab: function (
         x, y, radius,
         r, g, b, a,
