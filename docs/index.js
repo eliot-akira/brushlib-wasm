@@ -17,8 +17,6 @@ async function main() {
   canvas.width = window.innerWidth // rect.right - rect.left
   canvas.height = window.innerHeight // rect.bottom - rect.top
 
-  console.log(rect)
-
   const { Painter } = await brushlib.create()
   const painter = Painter.fromCanvas(canvas)
 
@@ -28,10 +26,42 @@ async function main() {
   painter.setColor(state.color)
 
   // painter.hover(0, 0, 0) // same as stroke() with pressure 0
-  painter.stroke(0, 0, 1, state.pressure, state.xtilt, state.ytilt)
-  painter.stroke(200, 200, 1, state.pressure, state.xtilt, state.ytilt)
-  painter.stroke(400, 200, 1, state.pressure, state.xtilt, state.ytilt)
-  painter.stroke(400, 400, 1, state.pressure, state.xtilt, state.ytilt)
+  // painter.stroke(x, y, dt, pressure, xtilt, ytilt)
+
+  painter.stroke(0, 0, 1, 0.8, 0, 0)
+  painter.stroke(200, 200, 1, 0.8, 0, 0)
+  painter.stroke(400, 200, 1, 0.8, 0, 0)
+  painter.stroke(400, 400, 1, 0.8, 0, 0)
+
+
+  painter.setBrush(brushlib.brushes[5])
+  painter.setColor([200, 0, 280])
+
+  painter.stroke(600, 400, 1, 0.01, 0, 0)
+  painter.stroke(200, 400, 1, 1, 0, 0)
+
+  painter.setBrush(brushlib.brushes[6])
+  painter.setColor([255, 255, 0])
+
+  painter.stroke(200, 400, 1, 0.8, 0, 0)
+  painter.stroke(200, 600, 1, 0.8, 0, 0)
+  painter.stroke(400, 600, 1, 0.8, 0, 0)
+  painter.stroke(200, 400, 1, 0.8, 0, 0)
+
+  painter.setBrush(brushlib.brushes[11])
+  painter.setColor([0, 255, 0])
+
+  painter.stroke(200, 400, 1, 0.8, 0, 0)
+  painter.stroke(200, 200, 1, 0.8, 0, 0)
+  painter.stroke(600, 400, 1, 0.8, 0, 0)
+
+
+  painter.setBrush(brushlib.brushes[26])
+  painter.setColor([0, 255, 255])
+
+  painter.stroke(200, 400, 1, 0.8, 0, 0)
+  painter.stroke(600, 0, 1, 0.3, 0, 0)
+  painter.stroke(600, 600, 1, 0.8, 0, 0)
 }
 
 main().catch(console.error)
