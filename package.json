@@ -1,7 +1,7 @@
 {
   "name": "brushlib-wasm",
   "version": "1.0.0",
-  "description": "",
+  "description": "Brush engine based on WebAssembly port of MyPaint",
   "main": "index.js",
   "scripts": {
     "build": "npm run wasm:build && mv docs/brushlib.js docs/brushlib-loader.js && npm run build:concat && rm docs/brushlib-loader.js",
