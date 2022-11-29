@@ -4,6 +4,8 @@ Brush engine based on WebAssembly port of MyPaint
 
 Demo: [https://eliot-akira.github.io/brushlib-wasm](https://eliot-akira.github.io/brushlib-wasm)
 
+![Screenshot](./screenshot.jpeg)
+
 ## Build
 
 Built with [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) 3.1.26
