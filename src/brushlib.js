@@ -45,6 +45,22 @@ exports.create = function create() {
     class Bindings {
       constructor(drawDab, getColor) {
 
+        /**
+         * Module.addFunction(function, signature)
+         *
+         * Signature is a string with each character being a type:
+         *
+         * - i = i32
+         * - j = i64
+         * - f = f32
+         * - d = f64
+         * - p = i64 (if 64-bit memory) or i32
+         *
+         * First character is return value.
+         *
+         * @see https://github.com/emscripten-core/emscripten/blob/2c7b97cff48fd3efc7020e31b25d2303f4d2a0a6/src/library_addfunction.js#L23
+         */
+
         const colorProxyPtr = Module.addFunction(
           createGetColorProxy(Module, getColor),
           // (x, y, radius, rPointer, gPointer, bPointer, aPointer)
@@ -70,8 +86,8 @@ exports.create = function create() {
         this.stroke_to = Module.cwrap(
           'stroke_to',
           'void',
-          ['number', 'number', 'number', 'number', 'number', 'number']
           // float x, float y, float pressure, float xtilt, float ytilt, double dtime
+          ['number', 'number', 'number', 'number', 'number', 'number']
         )
 
         this.load_brush = bind(loadBrush, this)
