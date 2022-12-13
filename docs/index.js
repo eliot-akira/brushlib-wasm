@@ -2,85 +2,48 @@
 async function main() {
 
   const { brushlib } = window
-  console.log('brushlib', brushlib)
 
   const canvas = document.querySelector('#canvas')
-  const rect = document.body.getBoundingClientRect()
+  const painter = await brushlib.create(canvas)
+  const brushes = brushlib.brushes
 
-  canvas.width = window.innerWidth // rect.right - rect.left
-  canvas.height = window.innerHeight // rect.bottom - rect.top
+  const ctx = canvas.getContext('2d') 
 
-  const { Painter } = await brushlib.create()
-  const painter = Painter.fromCanvas(canvas)
+  let i = 0
+  const brushAreaHeight = 40
+  const brushAreaMarginX = 20
 
-  console.log('painter', painter)
+  // const rect = document.body.getBoundingClientRect()
+  canvas.width = 600 // window.innerWidth // rect.right - rect.left
+  canvas.height = brushes.length * brushAreaHeight // window.innerHeight // rect.bottom - rect.top
 
+  // canvas.style.backgroundColor = 'rgb(39, 43, 54)'
 
-  // painter.hover(0, 0, 0) // same as stroke() with pressure 0
-  // painter.stroke(x, y, dt, pressure, xtilt, ytilt)
+  ctx.font = '16px sans-serif'
+  ctx.fillStyle = 'black'
 
-  // painter.stroke(0, 0, 1, 0.8, 0, 0)
-  // painter.stroke(200, 200, 1, 0.8, 0, 0)
-  // painter.stroke(400, 200, 1, 0.8, 0, 0)
-  // painter.stroke(400, 400, 1, 0.8, 0, 0)
+  const maxX = canvas.width
 
-  painter.setBrush(brushlib.brushes[16])
-  painter.setColor([140, 222, 220])
+  for (const brush of brushes) {
 
-  let points
+    painter.setBrush(brush)
 
-  points = [
-    ...getCubicBezierPoints(
-      [{ x: 800, y: 700 }, { x: 400, y: -440 }, { x: 650, y: 200 }, { x: 0, y: 400 }],
-      20
+    painter.setColor(
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255),
     )
-  ]
 
-  for (const point of points) {
-    painter.stroke(point.x, point.y, 0.1, 0.7 * Math.random() + 0.1, 0, 0)
+    const y = (brushAreaHeight / 2) + (i * brushAreaHeight)
+
+    painter.newStroke(brushAreaMarginX, y)
+    painter.stroke(brushAreaMarginX, y, 0, 1, 0, 0)
+    painter.stroke(maxX - brushAreaMarginX, y, 1, 1, 0, 0)
+
+    // ctx.fillText(brush.name, 25, y)
+
+    i++
   }
-
-  painter.setBrush(brushlib.brushes[1])
-  painter.setColor([10, 100, 180])
-  points = [
-    ...getCubicBezierPoints(
-      [{ x: 0, y: 400 }, { x: 190, y: -140 }, { x: 200, y: 1000 }, { x: 550, y: 200 }],
-      20
-    ),
-  ]
-
-  for (const point of points) {
-    painter.stroke(point.x, point.y, 1, 0.5 * Math.random() + 0.2, 0, 0)
-  }
-
-  // painter.setBrush(brushlib.brushes[6])
-  // painter.setColor([255, 255, 0])
-
-  // painter.stroke(200, 200, 1, 0.8, 0, 0)
-  // painter.stroke(0, 600, 1, 0.8, 0, 0)
-  // painter.stroke(600, 200, 1, 0.1, 0, 0)
-  // // painter.stroke(200, 400, 1, 0.8, 0, 0)
-
-  painter.setBrush(brushlib.brushes[11])
-  painter.setColor([0, 255, 0])
-
-  points = [
-    ...getCubicBezierPoints(
-      [{ x: 100, y: 0 }, { x: 300, y: 540 }, { x: 550, y: 200 }, { x: 600, y: 600 }],
-      20
-    )
-  ]
-
-  for (const point of points) {
-    painter.stroke(point.x, point.y, 1, 0.8 * Math.random() + 0.2, 0, 0)
-  }
-
-  painter.setBrush(brushlib.brushes[17])
-  painter.setColor([80, 80, 180])
-  painter.stroke(0, 400, 1, 1, 0, 0)
-  painter.stroke(800, 550, 2, 0.1, 0, 0)
-  painter.stroke(0, 200, 1, 0.1, 0, 0)
-  painter.stroke(800, 50, 2, 1, 0, 0)
 }
 
 main().catch(console.error)

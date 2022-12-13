@@ -1,4 +1,4 @@
-# Brushlib WASM
+# [Brushlib WASM](https://github.com/eliot-akira/brushlib-wasm)
 
 Brush engine based on WebAssembly port of MyPaint
 
